@@ -63,6 +63,11 @@ public class Client {
         return true;
         // validates passwords based on constraints
     }
+      
+    public static boolean validateID(String uname, Socket socket, BufferedWriter out)
+    {
+        return true;
+    }
     
     public static boolean addUser(BufferedReader in, Socket socket)
     {

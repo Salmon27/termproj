@@ -27,17 +27,18 @@ class Server {
         } else if (user.getClass().getName() == "User") {
             table = "Users";
         }
-        String sqlString = "INSERT INTO ? VALUES (?, ?, ?, ?, ?, ?);";
+        String sqlString = "INSERT INTO ? VALUES (?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement stmt;
         try {
             stmt = conn.prepareStatement(sqlString);
             stmt.setString(1, table);
-            stmt.setString(2, user.getfName());
-            stmt.setString(3, user.getlName());
-            stmt.setString(4, user.getAddr());
-            stmt.setString(5, user.getPhone());
-            stmt.setString(6, user.getPword());
-            stmt.setString(7, user.getEmail());
+            stmt.setString(2, user.getID().toLowerCase());
+            stmt.setString(3, user.getfName());
+            stmt.setString(4, user.getlName());
+            stmt.setString(5, user.getAddr());
+            stmt.setString(6, user.getPhone());
+            stmt.setString(7, user.getPword());
+            stmt.setString(8, user.getEmail());
             stmt.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Failed");
@@ -45,7 +46,32 @@ class Server {
 
     }
 
-    public static User searchUser(String uname, String pword, Connection conn) {
+    public static User searchUser(String uname, String pword, Connection conn) throws SQLException {
+        String[] tables = {"Admins", "Users", "Employees"};
+        ResultSet rs = null;
+        for (int i = 0; i < tables.length; i++) {
+            PreparedStatement stmt;
+            try {
+                stmt = conn.prepareStatement("SELECT * FROM ? WHERE ID = ? OR email = ? AND password = ?");
+                stmt.setString(1, tables[i]);  
+                stmt.setString(2, uname.toLowerCase()); 
+                stmt.setString(3, uname.toLowerCase()); 
+                stmt.setString(4, pword); 
+                rs = stmt.executeQuery();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            while(rs.next())
+            {
+                User user = new User();
+                user.setID(uname);
+                user.set
+            }
+
+        }
+
         return null;
         // searches db for user, returns the user if found
     }
