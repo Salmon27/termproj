@@ -63,5 +63,10 @@ public class User {
         this.pword = pword;
     }
     
+    protected String getPword()
+    {
+        return this.pword;
+    }
+    
     
 }
