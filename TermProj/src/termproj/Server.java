@@ -49,6 +49,11 @@ class Server {
     
     
     public static void main(String args[]) throws Exception {
+        
+        Connection conn;  
+        conn = DriverManager.getConnection("jdbc:ucanaccess://c://Users//AJSal//Downloads//JDBC//BookStore.accdb");
+        System.out.println("Connected Successfully");
+        
         //Create welcome socket atport 6789
         ServerSocket welcomeSocket = new ServerSocket(6789);
         while (true) //waiting for other client sockets
