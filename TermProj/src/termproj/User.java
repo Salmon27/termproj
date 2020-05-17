@@ -1,8 +1,10 @@
 
 package termproj;
 
+import java.io.Serializable;
 
-public class User {
+
+public class User implements Serializable{
     private String ID; // userName, ex. Salmon27
     private String fName;
     private String lName;
