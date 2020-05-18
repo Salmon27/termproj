@@ -106,7 +106,7 @@ class Server {
         ArrayList<Book> bookList = new ArrayList<>();
         PreparedStatement stmt;
         try {
-            stmt = conn.prepareStatement("SELECT * FROM ? WHERE title = ?");
+            stmt = conn.prepareStatement("SELECT * FROM ? WHERE title LIKE %?%");
             stmt.setString(1, "Books");
             stmt.setString(2, title.toLowerCase());
             rs = stmt.executeQuery();
@@ -176,6 +176,9 @@ class Server {
 
                 User user = (User) objFromClient.readObject();
                 insertUser(user, conn);
+                outToClient.write("User Added");
+                outToClient.newLine();
+                outToClient.flush();
 
             } else if (clientSentence.equals("SEARCH BOOK")) {
                 String title = inFromClient.readLine();
@@ -184,11 +187,21 @@ class Server {
                 for (int i = 0; i < bookList.size(); i++) {
                     returnString += bookList.get(i).toString();
                 }
+                if (bookList.size() == 0) {
+                       returnString = "Nothing Found";
+                }
                 outToClient.write(returnString);
                 outToClient.newLine();
                 outToClient.flush();
+            } else if (clientSentence.equals("CHECK OUT")) {
+                User user = (User) objFromClient.readObject();
+                ArrayList<Book> bookList = (ArrayList<Book>) objFromClient.readObject();
+                checkOut(user, bookList, conn);
+                outToClient.write("Checked Out");
+                outToClient.newLine();
+                outToClient.flush();
             }
- {
+            {
 
                 String[] parts = clientSentence.trim().split(" ");
 
