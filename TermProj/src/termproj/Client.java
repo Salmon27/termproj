@@ -21,9 +21,30 @@ import java.util.Scanner;
  */
 public class Client {
 
-    public static int menu() {
-        return -1;
+    public static int menu(User user) {
+        if (user == null) {
+            System.out.println("=======================");
+            System.out.println("= WELCOME TO BOOKSTOP =");
+            System.out.println("=======================");
+            System.out.println();
+            System.out.println("1. Register User");
+            System.out.println("2. Sign in");
+            System.out.println("0. Exit");
+        }
+
         // show options, read input, return choice
+        /*
+         * menu 1
+         * 
+         * 1. Adduser 2. Signin
+         */
+        /*
+         * menu 2
+         * 
+         * 1. search book 2. add to cart 3. checkout
+         */
+
+        return -1;
     }
 
     public static boolean searchBook(BufferedReader in, Socket socket) {
@@ -67,17 +88,21 @@ public class Client {
     }
 
     public static boolean validateEmail(String email) {
-        return email.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
+        return true;
+        // return email.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
     }
 
     public static boolean validatePhoneNo(String num) {
-        return num.matches("^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$");
+        return true;
+        // return
+        // num.matches("^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$")
     }
 
     public static boolean validatePword(String pword) {
+        return true;
         // validates passwords based on constraints
         // more than 8characters, must contain upper and lower and a number
-        return pword.matches("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})");
+        // return pword.matches("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})")
     }
 
     public static boolean validateID(String uname, BufferedWriter outToServer, BufferedReader inFromServer) {
@@ -121,6 +146,9 @@ public class Client {
             System.out.println("ERR: Input Invalid!");
         }
 
+        System.out.println("Enter your home address: ");
+        user.setAddr(input.nextLine());
+
         while (true) {
             System.out.print("Enter your phone number: ");
             tempAnswer = input.nextLine();
@@ -144,9 +172,8 @@ public class Client {
         }
 
         outToServer.write("ADD USER");
-        outToServer.newLine();
-        outToServer.flush();
         objToServer.writeObject(user); // Send object to server
+        objToServer.flush();
 
         return true;
         // check if information is valid
@@ -172,8 +199,6 @@ public class Client {
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             BufferedWriter outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             ObjectOutputStream objToServer = new ObjectOutputStream(clientSocket.getOutputStream());
-
-            addUser(objToServer, outToServer, inFromServer);
 
             String sentence = inFromUser.readLine();
             outToServer.write(sentence); // Send line to server
