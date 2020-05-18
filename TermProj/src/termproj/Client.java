@@ -52,6 +52,7 @@ public class Client {
 
             try {
                 if (choice >= 0 || choice <= 3) {
+                    input.close();
                     return choice;
                 } else {
                     System.out.println("ERR: Choice not recognized!");
@@ -75,9 +76,24 @@ public class Client {
 
     }
 
-    public static boolean searchBook(BufferedReader in, Socket socket) {
+    public static boolean searchBook(BufferedReader inFromServer, BufferedWriter outToServer) throws IOException {
+        Scanner input = new Scanner(System.in);
+        String userInput;
+
+        System.out.println("Enter a title of a book: ");
+        userInput = input.nextLine();
+
+        outToServer.write(userInput);
+
+        String answer = inFromServer.readLine();
+        System.out.println("From Server: " + answer);
+
+        input.close();
+
         return true;
-        // searches for a book
+        // read from user, send title search to server
+        // scanner reads title, writer writes title, reader reads response from server
+        // and prints it out
     }
 
     public static void addToCart(Book[] cart, Socket socket) {
