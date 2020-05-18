@@ -18,6 +18,15 @@ public class Book {
     private String condition;
     private int numPages;
     private Date pubDate;
+    private int quantity;
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public String getISBN() {
         return ISBN;

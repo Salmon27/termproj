@@ -12,6 +12,7 @@ package termproj;
 import java.io.*;
 import java.net.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -100,9 +101,50 @@ class Server {
             System.out.println("Failed");
         }
     }
+    
+    public static ArrayList<Book> searchBook(String title, Connection conn) throws SQLException
+    {
+        ResultSet rs = null;
+        ArrayList<Book> bookList = new ArrayList<>();
+        PreparedStatement stmt;
+            try {
+                stmt = conn.prepareStatement("SELECT * FROM ? WHERE title = ?");
+                stmt.setString(1, "Books");
+                stmt.setString(2, title.toLowerCase());
+                rs = stmt.executeQuery();
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            while (rs.next()) {
+                Book currentBook = new Book();
+                currentBook.setISBN(rs.getString("ISBN"));
+                currentBook.setTitle(rs.getString("title"));
+                currentBook.setAuthor(rs.getString("author"));
+                currentBook.setCondition(rs.getString("addr"));
+                currentBook.setNumPages(rs.getInt("numPages"));
+                currentBook.setPubDate(rs.getDate("pubDate"));
+                currentBook.setQuantity(rs.getInt("quantity"));
+                bookList.add(currentBook);
+            }
+
+        return bookList;
+    }
 
     public static void removeBook(Book book, int quantity, Connection conn) {
-        // subtracts quantity from the book's quantity
+        String sqlString = "UPDATE ? SET ? = ? WHERE ISBN = ?;";
+        PreparedStatement stmt;
+        try {
+            stmt = conn.prepareStatement(sqlString);
+            stmt.setString(1, "Books");
+            stmt.setString(2, "quantity");
+            stmt.setInt(3, quantity);
+            stmt.setString(4, book.getISBN());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Failed");
+        }
     }
 
     public static void deleteUser(Admin admin, User user, Connection conn) {
