@@ -28,21 +28,20 @@ class Server {
         } else if (user.getClass().getName() == "User") {
             table = "Users";
         }
-        String sqlString = "INSERT INTO ? VALUES (?, ?, ?, ?, ?, ?, ?);";
+        String sqlString = "INSERT INTO Users VALUES(?,?,?,?,?,?,?);";
         PreparedStatement stmt;
         try {
             stmt = conn.prepareStatement(sqlString);
-            stmt.setString(1, table);
-            stmt.setString(2, user.getID().toLowerCase());
-            stmt.setString(3, user.getfName());
-            stmt.setString(4, user.getlName());
-            stmt.setString(5, user.getAddr());
-            stmt.setString(6, user.getPhone());
-            stmt.setString(7, user.getPword());
-            stmt.setString(8, user.getEmail());
+            stmt.setString(1, user.getID().toLowerCase());
+            stmt.setString(2, user.getfName());
+            stmt.setString(3, user.getlName());
+            stmt.setString(4, user.getAddr());
+            stmt.setString(5, user.getPhone());
+            stmt.setString(6, user.getPword());
+            stmt.setString(7, user.getEmail());
             stmt.executeUpdate();
         } catch (SQLException ex) {
-            System.out.println("Failed");
+            System.out.println(ex.getMessage());
         }
 
     }
