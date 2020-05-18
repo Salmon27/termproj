@@ -88,13 +88,15 @@ public class Client {
         return true;
     }
 
-    public static boolean addUser(BufferedReader in, Socket socket, ObjectOutputStream objToServer) throws IOException {
+    public static boolean addUser(ObjectOutputStream objToServer) throws IOException {
 
         User user = new User();
-
         Scanner input = new Scanner(System.in);
         
         // get user information from user
+        System.out.print("Enter your username: ");
+        user.setID(input.nextLine());
+        
         System.out.print("Enter your first name: ");
         user.setfName(input.nextLine());
 
