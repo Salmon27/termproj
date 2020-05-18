@@ -84,36 +84,69 @@ public class Client {
         // return pword.matches("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})")
     }
 
-    public static boolean validateID(String uname, BufferedWriter outToServer) {
-       
+    public static boolean validateID(String uname, BufferedWriter outToServer, BufferedReader inFromServer) {
+
         return true;
     }
 
-    public static boolean addUser(ObjectOutputStream objToServer, BufferedWriter outToServer) throws IOException {
+    public static boolean addUser(ObjectOutputStream objToServer, BufferedWriter outToServer,
+            BufferedReader inFromServer) throws IOException {
 
         User user = new User();
         Scanner input = new Scanner(System.in);
-        
+        String tempAnswer = "";
+
         // get user information from user
-        System.out.print("Enter your username: ");
-        user.setID(input.nextLine());
-        
+        while (true) {
+            System.out.print("Enter your username: ");
+            tempAnswer = input.nextLine();
+
+            if (validateID(tempAnswer, outToServer, inFromServer)) {
+                user.setID(tempAnswer);
+                break;
+            }
+            System.out.println("ERR: Input Invalid!");
+        }
+
         System.out.print("Enter your first name: ");
         user.setfName(input.nextLine());
 
         System.out.print("Enter your last name: ");
         user.setlName(input.nextLine());
 
-        System.out.print("Enter your email: ");
-        user.setEmail(input.nextLine());
+        while (true) {
+            System.out.print("Enter your email: ");
+            tempAnswer = input.nextLine();
 
-        System.out.print("Enter your phone number: ");
-        user.setPhone(input.nextLine());
+            if (validateEmail(tempAnswer)) {
+                user.setEmail(tempAnswer);
+                break;
+            }
+            System.out.println("ERR: Input Invalid!");
+        }
 
-        System.out.print("Enter your password: ");
-        user.setPword(input.nextLine());
-        
-        
+        while (true) {
+            System.out.print("Enter your phone number: ");
+            tempAnswer = input.nextLine();
+
+            if (validatePhoneNo(tempAnswer)) {
+                user.setPhone(tempAnswer);
+                break;
+            }
+            System.out.println("ERR: Input Invalid!");
+        }
+
+        while (true) {
+            System.out.print("Enter your password: ");
+            tempAnswer = input.nextLine();
+
+            if (validatePword(tempAnswer)) {
+                user.setPword(tempAnswer);
+                break;
+            }
+            System.out.println("ERR: Input Invalid!");
+        }
+
         outToServer.write("ADD USER");
         objToServer.writeObject(user); // Send object to server
         objToServer.flush();
