@@ -10,6 +10,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -155,7 +157,7 @@ public class Client {
     }
 
     public static boolean addUser(ObjectOutputStream objToServer, BufferedWriter outToServer,
-            BufferedReader inFromServer) throws IOException {
+            BufferedReader inFromServer) throws IOException, NoSuchAlgorithmException {
 
         User user = new User();
         Scanner input = new Scanner(System.in);
@@ -209,7 +211,7 @@ public class Client {
             tempAnswer = input.nextLine();
 
             if (validatePword(tempAnswer)) {
-                user.setPword(tempAnswer);
+                user.setPword(encrypt(tempAnswer));
                 break;
             }
             System.out.println("ERR: Input Invalid!");
@@ -231,6 +233,20 @@ public class Client {
         return u;
         // send a username and password to the server, and the server will respond
         // with a user or with null. If User is found, the user is loggedIn
+    }
+
+    public static String encrypt(String line) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] digest = md.digest(line.getBytes());
+        return byteToString(digest);
+    }
+
+    public static String byteToString(byte[] digest) {
+        String dig = "";
+        for (int i = 0; i < digest.length; i++) {
+            dig += digest[i];
+        }
+        return dig;
     }
 
     public static void main(String args[]) throws Exception {
