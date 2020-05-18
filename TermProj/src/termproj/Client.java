@@ -67,21 +67,17 @@ public class Client {
     }
 
     public static boolean validateEmail(String email) {
-        return true;
-        // return email.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
+        return email.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
     }
 
     public static boolean validatePhoneNo(String num) {
-        return true;
-        // return
-        // num.matches("^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$")
+        return num.matches("^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$");
     }
 
     public static boolean validatePword(String pword) {
-        return true;
         // validates passwords based on constraints
         // more than 8characters, must contain upper and lower and a number
-        // return pword.matches("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})")
+        return pword.matches("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})");
     }
 
     public static boolean validateID(String uname, BufferedWriter outToServer, BufferedReader inFromServer) {
@@ -148,8 +144,9 @@ public class Client {
         }
 
         outToServer.write("ADD USER");
+        outToServer.newLine();
+        outToServer.flush();
         objToServer.writeObject(user); // Send object to server
-        objToServer.flush();
 
         return true;
         // check if information is valid
@@ -175,6 +172,8 @@ public class Client {
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             BufferedWriter outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             ObjectOutputStream objToServer = new ObjectOutputStream(clientSocket.getOutputStream());
+
+            addUser(objToServer, outToServer, inFromServer);
 
             String sentence = inFromUser.readLine();
             outToServer.write(sentence); // Send line to server
