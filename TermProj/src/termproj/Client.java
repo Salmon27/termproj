@@ -22,14 +22,43 @@ import java.util.Scanner;
 public class Client {
 
     public static int menu(User user) {
-        if (user == null) {
-            System.out.println("=======================");
-            System.out.println("= WELCOME TO BOOKSTOP =");
-            System.out.println("=======================");
-            System.out.println();
-            System.out.println("1. Register User");
-            System.out.println("2. Sign in");
-            System.out.println("0. Exit");
+
+        Scanner input = new Scanner(System.in);
+        int choice;
+
+        while (true) {
+            if (user == null) {
+                System.out.println("=======================");
+                System.out.println("= WELCOME TO BOOKSTOP =");
+                System.out.println("=======================");
+                System.out.println();
+                System.out.println("1. Register User");
+                System.out.println("2. Sign in");
+                System.out.println("0. Exit");
+                System.out.println();
+            } else {
+                System.out.println("======================");
+                System.out.println("=  BOOKSTOP CATALOG  =");
+                System.out.println("======================");
+                System.out.println();
+                System.out.println("1. Search Book");
+                System.out.println("2. Add to cart");
+                System.out.println("3. Checkout");
+                System.out.println("0. Logoff");
+                System.out.println();
+            }
+            System.out.print("Choice: ");
+            choice = input.nextInt();
+
+            try {
+                if (choice >= 0 || choice <= 3) {
+                    return choice;
+                } else {
+                    System.out.println("ERR: Choice not recognized!");
+                }
+            } catch (Exception e) {
+                System.out.println("ERR: Choice not recognized!");
+            }
         }
 
         // show options, read input, return choice
@@ -44,7 +73,6 @@ public class Client {
          * 1. search book 2. add to cart 3. checkout
          */
 
-        return -1;
     }
 
     public static boolean searchBook(BufferedReader in, Socket socket) {
@@ -170,6 +198,8 @@ public class Client {
             }
             System.out.println("ERR: Input Invalid!");
         }
+
+        input.close();
 
         outToServer.write("ADD USER");
         objToServer.writeObject(user); // Send object to server
