@@ -7,13 +7,14 @@ package termproj;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
-
+//import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 /**
  *
  * @author AJSal
@@ -41,7 +42,6 @@ public class Client {
     public static boolean validateCard(String cardNo) {
 
         // return true;
-
         int[] ints = new int[cardNo.length()];
         for (int i = 0; i < cardNo.length(); i++) {
             ints[i] = Integer.parseInt(cardNo.substring(i, i + 1));
@@ -83,39 +83,35 @@ public class Client {
         // more than 8characters, must contain upper and lower and a number
         // return pword.matches("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})")
     }
-   
-    public static boolean validateID(String uname, Socket socket, BufferedWriter out)
-    {
+
+    public static boolean validateID(String uname, Socket socket, BufferedWriter out) {
         return true;
     }
-    public static boolean addUser(BufferedReader in, Socket socket) {
 
-        String fName;
-        String lName;
-        String email;
-        String phoneNo;
-        String pword;
+    public static boolean addUser(BufferedReader in, Socket socket, ObjectOutputStream objToServer) throws IOException {
+
+        User user = new User();
 
         Scanner input = new Scanner(System.in);
-
-
-
-
+        
         // get user information from user
         System.out.print("Enter your first name: ");
-        fName = input.nextLine();
+        user.setfName(input.nextLine());
 
         System.out.print("Enter your last name: ");
-        lName = input.nextLine();
+        user.setlName(input.nextLine());
 
         System.out.print("Enter your email: ");
-        email = input.nextLine();
+        user.setEmail(input.nextLine());
 
         System.out.print("Enter your phone number: ");
-        phoneNo = input.nextLine();
+        user.setPhone(input.nextLine());
 
         System.out.print("Enter your password: ");
-        pword = input.nextLine();
+        user.setPword(input.nextLine());
+        
+        objToServer.writeObject(user); // Send object to server
+        objToServer.flush();
 
         return true;
         // check if information is valid
@@ -140,6 +136,7 @@ public class Client {
             // Create a input stream, attached to socket
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             BufferedWriter outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            ObjectOutputStream objToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 
             String sentence = inFromUser.readLine();
             outToServer.write(sentence); // Send line to server
