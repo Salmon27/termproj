@@ -10,6 +10,9 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Scanner;
+
+import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 
 /**
  *
@@ -37,7 +40,7 @@ public class Client {
 
     public static boolean validateCard(String cardNo) {
 
-        //return true;
+        // return true;
 
         int[] ints = new int[cardNo.length()];
         for (int i = 0; i < cardNo.length(); i++) {
@@ -82,8 +85,31 @@ public class Client {
     }
 
     public static boolean addUser(BufferedReader in, Socket socket) {
-        return true;
+        String fName;
+        String lName;
+        String email;
+        String phoneNo;
+        String pword;
+
+        Scanner input = new Scanner(System.in);
+
         // get user information from user
+        System.out.print("Enter your first name: ");
+        fName = input.nextLine();
+
+        System.out.print("Enter your last name: ");
+        lName = input.nextLine();
+
+        System.out.print("Enter your email: ");
+        email = input.nextLine();
+
+        System.out.print("Enter your phone number: ");
+        phoneNo = input.nextLine();
+
+        System.out.print("Enter your password: ");
+        pword = input.nextLine();
+
+        return true;
         // check if information is valid
         // create User and send to server for insertion
     }
