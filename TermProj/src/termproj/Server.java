@@ -27,17 +27,18 @@ class Server {
         } else if (user.getClass().getName() == "User") {
             table = "Users";
         }
-        String sqlString = "INSERT INTO ? VALUES (?, ?, ?, ?, ?, ?);";
+        String sqlString = "INSERT INTO ? VALUES (?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement stmt;
         try {
             stmt = conn.prepareStatement(sqlString);
             stmt.setString(1, table);
-            stmt.setString(2, user.getfName());
-            stmt.setString(3, user.getlName());
-            stmt.setString(4, user.getAddr());
-            stmt.setString(5, user.getPhone());
-            stmt.setString(6, user.getPword());
-            stmt.setString(7, user.getEmail());
+            stmt.setString(2, user.getID().toLowerCase());
+            stmt.setString(3, user.getfName());
+            stmt.setString(4, user.getlName());
+            stmt.setString(5, user.getAddr());
+            stmt.setString(6, user.getPhone());
+            stmt.setString(7, user.getPword());
+            stmt.setString(8, user.getEmail());
             stmt.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Failed");
@@ -45,7 +46,35 @@ class Server {
 
     }
 
-    public static User searchUser(String uname, String pword, Connection conn) {
+    public static User searchUser(String uname, String pword, Connection conn) throws SQLException {
+        String[] tables = {"Admins", "Users", "Employees"};
+        User user = new User();
+        ResultSet rs = null;
+        for (int i = 0; i < tables.length; i++) {
+            PreparedStatement stmt;
+            try {
+                stmt = conn.prepareStatement("SELECT * FROM ? WHERE ID = ? OR email = ? AND password = ?");
+                stmt.setString(1, tables[i]);
+                stmt.setString(2, uname.toLowerCase());
+                stmt.setString(3, uname.toLowerCase());
+                stmt.setString(4, pword);
+                rs = stmt.executeQuery();
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (rs.next()) {
+                user.setID(rs.getString("ID"));
+                user.setfName(rs.getString("fName"));
+                user.setlName(rs.getString("lName"));
+                user.setAddr(rs.getString("addr"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                return user;
+            }
+        }
+
         return null;
         // searches db for user, returns the user if found
     }
@@ -55,7 +84,21 @@ class Server {
     }
 
     public static void insertBook(Book book, Connection conn) {
-        // inserts book into DB or adds 1 to the book's quantity
+        String sqlString = "INSERT INTO ? VALUES (?, ?, ?, ?, ?, ?);";
+        PreparedStatement stmt;
+        try {
+            stmt = conn.prepareStatement(sqlString);
+            stmt.setString(1, "Books");
+            stmt.setString(2, book.getISBN());
+            stmt.setString(3, book.getTitle());
+            stmt.setString(4, book.getAuthor());
+            stmt.setString(5, book.getCondition());
+            stmt.setInt(6, book.getNumPages());
+            stmt.setDate(7, book.getPubDate());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Failed");
+        }
     }
 
     public static void removeBook(Book book, int quantity, Connection conn) {

@@ -83,8 +83,13 @@ public class Client {
         // more than 8characters, must contain upper and lower and a number
         // return pword.matches("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})")
     }
-
+   
+    public static boolean validateID(String uname, Socket socket, BufferedWriter out)
+    {
+        return true;
+    }
     public static boolean addUser(BufferedReader in, Socket socket) {
+<<<<<<< HEAD
         String fName;
         String lName;
         String email;
@@ -93,6 +98,10 @@ public class Client {
 
         Scanner input = new Scanner(System.in);
 
+=======
+
+        return true;
+>>>>>>> a94d9e4c9cadac13353ca39cd552c4e316843b8b
         // get user information from user
         System.out.print("Enter your first name: ");
         fName = input.nextLine();
