@@ -70,7 +70,7 @@ public class Client {
          * 
          * 1. Adduser 2. Signin
          */
- /*
+        /*
          * menu 2
          * 
          * 1. search book 2. add to cart 3. checkout
@@ -232,8 +232,33 @@ public class Client {
         // create User and send to server for insertion
     }
 
-    public static User searchUser(Socket socket, BufferedWriter out, String uName, String encryptedPword) {
+    public static User searchUser(BufferedReader inFromServer, ObjectOutputStream objToServer,
+            BufferedWriter outToServer, String uName, String encryptedPword)
+            throws IOException, NoSuchAlgorithmException {
         User u = null;
+        Scanner input = new Scanner(System.in);
+        String userInput;
+
+        System.out.println("Enter your username: ");
+        userInput = input.nextLine();
+        outToServer.write(userInput);
+        outToServer.newLine();
+        outToServer.flush();
+
+        String answer = inFromServer.readLine();
+        System.out.println("From Server(user): " + answer);
+
+        System.out.println("Enter your password: ");
+        userInput = input.nextLine();
+        outToServer.write(encrypt(userInput));
+        outToServer.newLine();
+        outToServer.flush();
+
+        answer = inFromServer.readLine();
+        System.out.println("From Server(pw): " + answer);
+
+        input.close();
+
         return u;
         // send a username and password to the server, and the server will respond
         // with a user or with null. If User is found, the user is loggedIn
