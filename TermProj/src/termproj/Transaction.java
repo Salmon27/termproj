@@ -5,6 +5,7 @@
  */
 package termproj;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
  */
 public class Transaction {
     
-    private String ISBN;
+    private String ISBN = "";
     private Date date;
     private String userID;
     private String transID;
@@ -22,8 +23,11 @@ public class Transaction {
         return ISBN;
     }
 
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+    public void setISBN(ArrayList<Book> bookList) {
+        for (int i = 0; i < bookList.size(); i++) {
+            
+            ISBN += bookList.get(i).getISBN() + ", ";
+        }
     }
 
     public Date getDate() {

@@ -83,6 +83,7 @@ public class Client {
         System.out.println("Enter a title of a book: ");
         userInput = input.nextLine();
 
+        outToServer.write("SEARCH BOOK");
         outToServer.write(userInput);
 
         String answer = inFromServer.readLine();
