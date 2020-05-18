@@ -84,11 +84,12 @@ public class Client {
         // return pword.matches("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})")
     }
 
-    public static boolean validateID(String uname, Socket socket, BufferedWriter out) {
+    public static boolean validateID(String uname, BufferedWriter outToServer) {
+       
         return true;
     }
 
-    public static boolean addUser(ObjectOutputStream objToServer) throws IOException {
+    public static boolean addUser(ObjectOutputStream objToServer, BufferedWriter outToServer) throws IOException {
 
         User user = new User();
         Scanner input = new Scanner(System.in);
@@ -112,6 +113,8 @@ public class Client {
         System.out.print("Enter your password: ");
         user.setPword(input.nextLine());
         
+        
+        outToServer.write("ADD USER");
         objToServer.writeObject(user); // Send object to server
         objToServer.flush();
 
