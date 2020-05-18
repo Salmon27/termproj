@@ -5,7 +5,7 @@
  */
 package termproj;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
@@ -18,5 +18,53 @@ public class Book {
     private String condition;
     private int numPages;
     private Date pubDate;
+
+    public String getISBN() {
+        return ISBN;
+    }
+
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return Author;
+    }
+
+    public void setAuthor(String Author) {
+        this.Author = Author;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
+
+    public int getNumPages() {
+        return numPages;
+    }
+
+    public void setNumPages(int numPages) {
+        this.numPages = numPages;
+    }
+
+    public Date getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(Date pubDate) {
+        this.pubDate = pubDate;
+    }
     
 }
