@@ -5,13 +5,14 @@
  */
 package termproj;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  *
  * @author AJSal
  */
-public class Book {
+public class Book implements Serializable{
     private String ISBN;
     private String title;
     private String author;

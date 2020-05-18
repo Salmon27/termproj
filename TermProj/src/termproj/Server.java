@@ -102,6 +102,7 @@ class Server {
     }
 
     public static ArrayList<Book> searchBook(String title, Connection conn) throws SQLException {
+        System.out.println("here 2");
         ResultSet rs = null;
         ArrayList<Book> bookList = new ArrayList<>();
         PreparedStatement stmt;
@@ -181,6 +182,7 @@ class Server {
                 outToClient.flush();
 
             } else if (clientSentence.equals("SEARCH BOOK")) {
+                System.out.println("here");
                 String title = inFromClient.readLine();
                 String returnString = "";
                 ArrayList<Book> bookList = searchBook(title, conn);

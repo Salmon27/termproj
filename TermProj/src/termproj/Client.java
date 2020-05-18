@@ -70,12 +70,11 @@ public class Client {
          * 
          * 1. Adduser 2. Signin
          */
-        /*
+ /*
          * menu 2
          * 
          * 1. search book 2. add to cart 3. checkout
          */
-
     }
 
     public static boolean searchBook(BufferedReader inFromServer, BufferedWriter outToServer) throws IOException {
@@ -86,7 +85,11 @@ public class Client {
         userInput = input.nextLine();
 
         outToServer.write("SEARCH BOOK");
+        outToServer.newLine();
+        outToServer.flush();
         outToServer.write(userInput);
+        outToServer.newLine();
+        outToServer.flush();
 
         String answer = inFromServer.readLine();
         System.out.println("From Server: " + answer);
@@ -262,6 +265,8 @@ public class Client {
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             BufferedWriter outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             ObjectOutputStream objToServer = new ObjectOutputStream(clientSocket.getOutputStream());
+
+            searchBook(inFromServer, outToServer);
 
             String sentence = inFromUser.readLine();
             outToServer.write(sentence); // Send line to server

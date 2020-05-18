@@ -7,13 +7,14 @@ package termproj;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.Serializable;
 import java.net.Socket;
 
 /**
  *
  * @author AJSal
  */
-public class Admin {
+public class Admin implements Serializable{
     protected void deleteUser(User customer, Socket socket, BufferedWriter out)
     {
         // sends instructions to the server to delete a customer or employee 
