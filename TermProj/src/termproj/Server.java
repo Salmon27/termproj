@@ -80,7 +80,7 @@ class Server {
         // searches db for user, returns the user if found
     }
 
-    public static void checkOut(User user, Book book, Connection conn) {
+    public static void checkOut(User user, ArrayList<Book> bookList, Connection conn) {
         // creates trasaction record and inserts it
     }
 
@@ -101,33 +101,32 @@ class Server {
             System.out.println("Failed");
         }
     }
-    
-    public static ArrayList<Book> searchBook(String title, Connection conn) throws SQLException
-    {
+
+    public static ArrayList<Book> searchBook(String title, Connection conn) throws SQLException {
         ResultSet rs = null;
         ArrayList<Book> bookList = new ArrayList<>();
         PreparedStatement stmt;
-            try {
-                stmt = conn.prepareStatement("SELECT * FROM ? WHERE title = ?");
-                stmt.setString(1, "Books");
-                stmt.setString(2, title.toLowerCase());
-                rs = stmt.executeQuery();
+        try {
+            stmt = conn.prepareStatement("SELECT * FROM ? WHERE title = ?");
+            stmt.setString(1, "Books");
+            stmt.setString(2, title.toLowerCase());
+            rs = stmt.executeQuery();
 
-            } catch (SQLException ex) {
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-            while (rs.next()) {
-                Book currentBook = new Book();
-                currentBook.setISBN(rs.getString("ISBN"));
-                currentBook.setTitle(rs.getString("title"));
-                currentBook.setAuthor(rs.getString("author"));
-                currentBook.setCondition(rs.getString("addr"));
-                currentBook.setNumPages(rs.getInt("numPages"));
-                currentBook.setPubDate(rs.getDate("pubDate"));
-                currentBook.setQuantity(rs.getInt("quantity"));
-                bookList.add(currentBook);
-            }
+        while (rs.next()) {
+            Book currentBook = new Book();
+            currentBook.setISBN(rs.getString("ISBN"));
+            currentBook.setTitle(rs.getString("title"));
+            currentBook.setAuthor(rs.getString("author"));
+            currentBook.setCondition(rs.getString("addr"));
+            currentBook.setNumPages(rs.getInt("numPages"));
+            currentBook.setPubDate(rs.getDate("pubDate"));
+            currentBook.setQuantity(rs.getInt("quantity"));
+            bookList.add(currentBook);
+        }
 
         return bookList;
     }
@@ -139,7 +138,7 @@ class Server {
             stmt = conn.prepareStatement(sqlString);
             stmt.setString(1, "Books");
             stmt.setString(2, "quantity");
-            stmt.setInt(3, quantity);
+            stmt.setInt(3, book.getQuantity() - quantity);
             stmt.setString(4, book.getISBN());
             stmt.executeUpdate();
         } catch (SQLException ex) {
@@ -169,15 +168,28 @@ class Server {
             //Create output stream, attached to socket
             BufferedWriter outToClient = new BufferedWriter(new OutputStreamWriter(connectSocket.getOutputStream()));
 
+            ObjectInputStream objFromClient = new ObjectInputStream(connectSocket.getInputStream());
+
             //Read in line from socket
             String clientSentence = inFromClient.readLine();
 
-            if (clientSentence.toLowerCase().equals("bye")) {
-                outToClient.write("Goodbye!");
+            if (clientSentence.equals("ADD USER")) {
+
+                User user = (User) objFromClient.readObject();
+                insertUser(user, conn);
+
+            } else if (clientSentence.equals("SEARCH BOOK")) {
+                String title = inFromClient.readLine();
+                String returnString = "";
+                ArrayList<Book> bookList = searchBook(title, conn);
+                for (int i = 0; i < bookList.size(); i++) {
+                    returnString += bookList.get(i).toString();
+                }
+                outToClient.write(returnString);
                 outToClient.newLine();
                 outToClient.flush();
-                break;
-            } else {
+            }
+ {
 
                 String[] parts = clientSentence.trim().split(" ");
 

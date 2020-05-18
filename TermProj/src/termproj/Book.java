@@ -14,7 +14,7 @@ import java.sql.Date;
 public class Book {
     private String ISBN;
     private String title;
-    private String Author;
+    private String author;
     private String condition;
     private int numPages;
     private Date pubDate;
@@ -45,11 +45,11 @@ public class Book {
     }
 
     public String getAuthor() {
-        return Author;
+        return author;
     }
 
     public void setAuthor(String Author) {
-        this.Author = Author;
+        this.author = Author;
     }
 
     public String getCondition() {
@@ -74,6 +74,11 @@ public class Book {
 
     public void setPubDate(Date pubDate) {
         this.pubDate = pubDate;
+    }
+    
+    @Override
+    public String toString() {
+        return title + "\n======================================================" + "\nISBN: " + ISBN  + " \tAuthor: " + author + "\nPub: " + pubDate.toString() + "\tBookQuantity: " + quantity + "\n======================================================";
     }
     
 }
